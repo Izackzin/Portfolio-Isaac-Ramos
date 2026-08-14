@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isaac Ramos — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#00ff88;--green-dark:#00cc6a;--green-darker:#008f4a;
+  --black:#0a0a0a;--black-2:#111;--black-3:#1a1a1a;--black-4:#222;
+  --white:#f0f0f0;--gray:#888;--gray-dark:#444;
+  --glass:rgba(0,255,136,0.05);--glass-border:rgba(0,255,136,0.15);
+}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.6}
+::selection{background:var(--green);color:var(--black)}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--black-2)}
+::-webkit-scrollbar-thumb{background:var(--green-darker);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--green-dark)}
+
+.navbar{position:fixed;top:0;left:0;width:100%;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(10,10,10,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);transition:all .4s ease}
+.navbar.scrolled{padding:.8rem 3rem;background:rgba(10,10,10,0.95)}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.4rem;color:var(--white);text-decoration:none;letter-spacing:-.5px}
+.nav-logo span{color:var(--green)}
+.nav-links{display:flex;gap:2rem;align-items:center;list-style:none}
+.nav-links a{color:var(--gray);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .3s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--green);transition:width .3s ease}
+.nav-links a:hover{color:var(--green)}
+.nav-links a:hover::after{width:100%}
+.lang-toggle{display:flex;gap:.5rem;align-items:center;border:1px solid var(--glass-border);border-radius:30px;padding:.3rem .5rem}
+.lang-btn{background:none;border:none;color:var(--gray);cursor:pointer;font-size:.8rem;font-weight:600;padding:.3rem .7rem;border-radius:20px;transition:all .3s}
+.lang-btn.active{background:var(--green);color:var(--black)}
+.nav-mobile-btn{display:none;background:none;border:none;color:var(--white);font-size:1.5rem;cursor:pointer}
+
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(circle at 20% 50%,rgba(0,255,136,0.08),transparent 40%),radial-gradient(circle at 80% 20%,rgba(0,255,136,0.06),transparent 35%),radial-gradient(circle at 50% 80%,rgba(0,255,136,0.05),transparent 40%)}
+.hero-grid{position:absolute;inset:0;z-index:0;opacity:.3;background-image:linear-gradient(rgba(0,255,136,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.07) 1px,transparent 1px);background-size:50px 50px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%)}
+.particle{position:absolute;border-radius:50%;background:var(--green);opacity:0;pointer-events:none;z-index:1;animation:floatParticle linear infinite}
+@keyframes floatParticle{0%{opacity:0;transform:translateY(0) scale(1)}10%{opacity:.6}90%{opacity:.6}100%{opacity:0;transform:translateY(-100vh) scale(.3)}}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:800px;padding:0 2rem}
+.hero-badge{display:inline-block;padding:.4rem 1.2rem;border:1px solid var(--glass-border);border-radius:30px;font-size:.8rem;color:var(--green);font-weight:500;margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .2s forwards;background:var(--glass)}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.5rem,7vw,5rem);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:1rem;opacity:0;animation:fadeUp .8s .4s forwards}
+.hero h1 .gradient-text{background:linear-gradient(135deg,var(--green),var(--green-dark),var(--green));background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shineText 3s linear infinite}
+@keyframes shineText{to{background-position:200% center}}
+.hero p{font-size:clamp(1rem,2vw,1.2rem);color:var(--gray);max-width:600px;margin:0 auto 2rem;opacity:0;animation:fadeUp .8s .6s forwards}
+.hero-cta{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .8s forwards}
+.btn{padding:.9rem 2rem;border-radius:12px;font-weight:600;font-size:.95rem;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:all .3s ease;cursor:pointer;border:none}
+.btn-primary{background:var(--green);color:var(--black);box-shadow:0 0 20px rgba(0,255,136,0.3)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 0 35px rgba(0,255,136,0.5)}
+.btn-secondary{background:transparent;color:var(--white);border:1px solid var(--glass-border)}
+.btn-secondary:hover{border-color:var(--green);color:var(--green);transform:translateY(-3px)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+section{padding:6rem 3rem;position:relative}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:.5rem;letter-spacing:-1px}
+.section-title span{color:var(--green)}
+.section-subtitle{color:var(--gray);font-size:1rem;margin-bottom:3rem}
+.container{max-width:1100px;margin:0 auto}
+
+.about-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:3rem;align-items:center}
+.about-photo{width:100%;max-width:320px;aspect-ratio:1;border-radius:20px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--black-3),var(--black-2));border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;margin:0 auto}
+.about-photo::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,255,136,0.1),transparent 50%);z-index:1}
+.about-photo img{width:100%;height:100%;object-fit:cover;position:relative;z-index:2}
+.about-photo-placeholder{position:relative;z-index:2;text-align:center}
+.about-photo-placeholder .icon{font-size:3rem;color:var(--green-darker);margin-bottom:.5rem}
+.about-photo-placeholder span{font-size:.8rem;color:var(--gray);display:block;padding:0 1rem}
+.about-text p{color:var(--gray);margin-bottom:1.2rem;font-size:1.02rem}
+.about-text p strong{color:var(--white)}
+.about-text .highlight{color:var(--green);font-weight:600}
+.about-tags{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.5rem}
+.tag{padding:.4rem 1rem;border-radius:20px;font-size:.8rem;font-weight:500;background:var(--glass);border:1px solid var(--glass-border);color:var(--green)}
+
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem}
+.skill-card{background:var(--black-2);border:1px solid var(--glass-border);border-radius:16px;padding:2rem;text-align:center;transition:all .4s ease;position:relative;overflow:hidden}
+.skill-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--glass),transparent);transition:left .6s ease}
+.skill-card:hover::before{left:100%}
+.skill-card:hover{transform:translateY(-8px);border-color:var(--green);box-shadow:0 10px 30px rgba(0,255,136,0.1)}
+.skill-icon{font-size:2.2rem;margin-bottom:1rem}
+.skill-card h3{font-size:1.1rem;margin-bottom:.5rem;color:var(--white)}
+.skill-card p{font-size:.85rem;color:var(--gray)}
+.skill-bar{margin-top:1rem;height:6px;background:var(--black-4);border-radius:3px;overflow:hidden}
+.skill-bar-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--green-dark));border-radius:3px;width:0;transition:width 1.5s ease}
+
+.timeline{position:relative;max-width:700px;margin:0 auto}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(var(--green),transparent)}
+.timeline-item{position:relative;padding-left:2.5rem;margin-bottom:2.5rem}
+.timeline-item::before{content:'';position:absolute;left:-7px;top:6px;width:16px;height:16px;border-radius:50%;background:var(--green);box-shadow:0 0 15px rgba(0,255,136,0.5);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 15px rgba(0,255,136,0.5)}50%{box-shadow:0 0 25px rgba(0,255,136,0.8)}}
+.timeline-date{font-size:.8rem;color:var(--green);font-weight:600;margin-bottom:.3rem}
+.timeline-item h3{font-size:1.1rem;color:var(--white);margin-bottom:.3rem}
+.timeline-item p{font-size:.9rem;color:var(--gray)}
+
+/* ===== CERTIFICATES ===== */
+.cert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
+.cert-card{
+  background:var(--black-2);border:1px solid var(--glass-border);
+  border-radius:16px;padding:2rem;transition:all .4s ease;
+  position:relative;overflow:hidden;cursor:pointer;
+}
+.cert-card::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,var(--glass),transparent);
+  transition:left .6s ease;
+}
+.cert-card:hover::before{left:100%}
+.cert-card:hover{
+  transform:translateY(-8px) scale(1.01);
+  border-color:var(--green);box-shadow:0 10px 30px rgba(0,255,136,0.1);
+}
+.cert-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.cert-icon{font-size:2rem}
+.cert-hours{
+  font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;
+  color:var(--green);background:var(--glass);border:1px solid var(--glass-border);
+  padding:.3rem .8rem;border-radius:20px;
+}
+.cert-card h3{font-size:1.1rem;color:var(--white);margin-bottom:.3rem}
+.cert-course{font-size:.95rem;color:var(--green);font-weight:600;margin-bottom:.8rem}
+.cert-desc{font-size:.85rem;color:var(--gray);line-height:1.5}
+.cert-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
+.cert-tag{
+  padding:.25rem .7rem;border-radius:15px;font-size:.7rem;font-weight:500;
+  background:var(--glass);border:1px solid var(--glass-border);color:var(--green-darker);
+}
+.cert-zoom-hint{
+  margin-top:1rem;padding:.5rem;border-radius:8px;
+  text-align:center;font-size:.78rem;color:var(--green-darker);
+  background:var(--glass);border:1px solid var(--glass-border);
+  transition:all .3s ease;
+}
+.cert-card:hover .cert-zoom-hint{
+  background:var(--green);color:var(--black);border-color:var(--green);
+}
+
+/* ===== CERT MODAL ===== */
+.cert-modal-overlay{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;
+  transition:opacity .3s ease,visibility .3s ease;
+  padding:2rem;
+}
+.cert-modal-overlay.active{opacity:1;visibility:visible}
+.cert-modal{
+  position:relative;max-width:700px;width:100%;
+  background:var(--black-2);border:1px solid var(--glass-border);
+  border-radius:20px;padding:2rem;
+  transform:scale(0.9);transition:transform .3s ease;
+  max-height:90vh;overflow-y:auto;
+}
+.cert-modal-overlay.active .cert-modal{transform:scale(1)}
+.cert-modal-close{
+  position:absolute;top:1rem;right:1rem;
+  background:var(--glass);border:1px solid var(--glass-border);
+  color:var(--green);font-size:.85rem;font-weight:600;
+  padding:.5rem 1rem;border-radius:10px;cursor:pointer;
+  transition:all .3s ease;z-index:1;
+}
+.cert-modal-close:hover{background:var(--green);color:var(--black)}
+.cert-modal-title{
+  font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;
+  color:var(--white);margin-bottom:1.5rem;padding-right:5rem;
+}
+.cert-modal-img-wrap{
+  position:relative;border-radius:12px;overflow:hidden;
+  background:var(--black-3);min-height:300px;
+  display:flex;align-items:center;justify-content:center;
+}
+.cert-modal-img-wrap img{
+  width:100%;height:auto;display:block;border-radius:12px;
+}
+.cert-modal-img-wrap img.hidden{display:none}
+.cert-modal-placeholder{
+  text-align:center;padding:3rem 1rem;
+}
+.cert-modal-placeholder .placeholder-icon{font-size:3rem;margin-bottom:1rem}
+.cert-modal-placeholder p{color:var(--gray);font-size:.9rem;line-height:1.5}
+.cert-modal-placeholder.hidden{display:none}
+.cert-modal-download-btn{
+  display:inline-flex;margin-top:1.5rem;
+  padding:.7rem 1.5rem;border-radius:10px;
+  background:var(--green);color:var(--black);
+  font-weight:600;font-size:.9rem;text-decoration:none;
+  transition:all .3s ease;align-items:center;gap:.5rem;
+}
+.cert-modal-download-btn:hover{transform:translateY(-3px);box-shadow:0 5px 20px rgba(0,255,136,0.3)}
+
+.hobbies-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem}
+.hobby-card{background:var(--black-2);border:1px solid var(--glass-border);border-radius:16px;padding:2rem 1.5rem;text-align:center;transition:all .4s ease;cursor:default}
+.hobby-card:hover{transform:translateY(-8px) rotate(-1deg);border-color:var(--green);background:var(--black-3)}
+.hobby-icon{font-size:2.5rem;margin-bottom:1rem}
+.hobby-card h3{font-size:1rem;color:var(--white);margin-bottom:.3rem}
+.hobby-card p{font-size:.8rem;color:var(--gray)}
+
+.contact{text-align:center}
+.contact-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-top:2rem}
+.contact-card{background:var(--black-2);border:1px solid var(--glass-border);border-radius:14px;padding:1.5rem 2rem;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:.5rem;transition:all .3s ease;min-width:140px}
+.contact-card:hover{transform:translateY(-5px);border-color:var(--green);box-shadow:0 8px 25px rgba(0,255,136,0.1)}
+.contact-card .icon{font-size:1.5rem}
+.contact-card span{color:var(--gray);font-size:.85rem;font-weight:500}
+.contact-card:hover span{color:var(--green)}
+
+footer{padding:2rem;text-align:center;border-top:1px solid var(--glass-border);background:var(--black-2)}
+footer p{font-size:.85rem;color:var(--gray)}
+footer p span{color:var(--green)}
+
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.15s}
+.reveal-delay-2{transition-delay:.3s}
+.reveal-delay-3{transition-delay:.45s}
+
+@media(max-width:768px){
+  .navbar{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .nav-mobile-btn{display:block}
+  .nav-links.mobile-open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;width:100%;background:rgba(10,10,10,0.98);padding:1.5rem;gap:1.5rem;border-bottom:1px solid var(--glass-border)}
+  section{padding:4rem 1.5rem}
+  .about-grid{grid-template-columns:1fr}
+  .about-photo{max-width:280px;margin:0 auto 2rem}
+  .hero-cta{flex-direction:column;align-items:center}
+  .btn{width:100%;max-width:280px;justify-content:center}
+  .cert-modal{padding:1.5rem}
+  .cert-modal-title{font-size:1.1rem;padding-right:4rem}
+  .cert-modal-img-wrap{min-height:200px}
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <a href="#hero" class="nav-logo">Isaac<span>.</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about" data-pt="Sobre" data-en="About">Sobre</a></li>
+    <li><a href="#skills" data-pt="Skills" data-en="Skills">Skills</a></li>
+    <li><a href="#experience" data-pt="Experiência" data-en="Experience">Experiência</a></li>
+    <li><a href="#certificates" data-pt="Certificados" data-en="Certificates">Certificados</a></li>
+    <li><a href="#hobbies" data-pt="Hobbies" data-en="Hobbies">Hobbies</a></li>
+    <li><a href="#contact" data-pt="Contato" data-en="Contact">Contato</a></li>
+    <li>
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btnPT" onclick="switchLang('pt')">PT</button>
+        <button class="lang-btn" id="btnEN" onclick="switchLang('en')">EN</button>
+      </div>
+    </li>
+  </ul>
+  <button class="nav-mobile-btn" onclick="toggleMobileNav()">☰</button>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge" data-pt="🚀 Disponível para novos projetos" data-en="🚀 Open to new projects">🚀 Disponível para novos projetos</div>
+    <h1>Isaac Ramos<br><span class="gradient-text" data-pt="Engenheiro de Software & Designer" data-en="Software Engineer & Designer">Engenheiro de Software & Designer</span></h1>
+    <p data-pt="Estudante de Engenharia de Software na UniCEUB. Full stack, designer gráfico desde os 13 anos, fundador da Osprey Aerial Solutions e apaixonado por criar soluções que unem código e estética." data-en="Software Engineering student at UniCEUB. Full stack developer, graphic designer since age 13, founder of Osprey Aerial Solutions, passionate about building solutions that blend code and aesthetics.">Estudante de Engenharia de Software na UniCEUB. Full stack, designer gráfico desde os 13 anos, fundador da Osprey Aerial Solutions e apaixonado por criar soluções que unem código e estética.</p>
+    <div class="hero-cta">
+      <a href="#about" class="btn btn-primary" data-pt="Sobre mim" data-en="About me">Sobre mim ↓</a>
+      <a href="#contact" class="btn btn-secondary" data-pt="Contato" data-en="Contact">Contato</a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <h2 class="section-title reveal" data-pt="Sobre <span>Mim</span>" data-en="About <span>Me</span>">Sobre <span>Mim</span></h2>
+    <p class="section-subtitle reveal reveal-delay-1" data-pt="Quem sou e o que faço" data-en="Who I am and what I do">Quem sou e o que faço</p>
+    <div class="about-grid">
+      <div class="about-photo reveal">
+        <img src="foto-profissional.png" alt="Isaac Ramos" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div class="about-photo-placeholder" style="display:none">
+          <div class="icon">📷</div>
+          <span>Coloque sua foto aqui<br>(arquivo "foto-profissional.png")</span>
+        </div>
+      </div>
+      <div class="about-text reveal reveal-delay-1">
+        <p data-pt="Sou estudante de <strong>Engenharia de Software na UniCEUB</strong>, atualmente no segundo semestre. Minha paixão por tecnologia começou cedo: desde pequeno sonhava em <span class='highlight'>desenvolver jogos</span>, e aos 12 anos fiz um curso que me apresentou aos fundamentos de programação e design — experiência que despertou ainda mais minha vontade de seguir essa carreira." data-en="I'm a <strong>Software Engineering student at UniCEUB</strong>, currently in my second semester. My passion for technology started early: since I was a kid, I dreamed of <span class='highlight'>developing games</span>, and at 12 years old I took a course that introduced me to the fundamentals of programming and design — an experience that fueled my desire to pursue this career even further.">Sou estudante de <strong>Engenharia de Software na UniCEUB</strong>, atualmente no segundo semestre. Minha paixão por tecnologia começou cedo: desde pequeno sonhava em <span class="highlight">desenvolver jogos</span>, e aos 12 anos fiz um curso que me apresentou aos fundamentos de programação e design — experiência que despertou ainda mais minha vontade de seguir essa carreira.</p>
+        <p data-pt="Hoje, gosto de programar principalmente como <span class='highlight'>desenvolvedor full stack</span>, unindo o raciocínio lógico do backend à estética do frontend. Paralelamente, atuo com <span class='highlight'>design gráfico desde os meus 13 anos</span>, e já trabalhei tanto na área de design quanto na de edição de vídeo, o que me dá um olhar apurado para detalhes e composição visual." data-en="Today, I enjoy programming mainly as a <span class='highlight'>full stack developer</span>, combining the logical thinking of the backend with the aesthetics of the frontend. Alongside that, I've been working with <span class='highlight'>graphic design since I was 13</span>, and I've already worked in both design and video editing, which gives me a sharp eye for detail and visual composition.">Hoje, gosto de programar principalmente como <span class="highlight">desenvolvedor full stack</span>, unindo o raciocínio lógico do backend à estética do frontend. Paralelamente, atuo com <span class="highlight">design gráfico desde os meus 13 anos</span>, e já trabalhei tanto na área de design quanto na de edição de vídeo, o que me dá um olhar apurado para detalhes e composição visual.</p>
+        <p data-pt="Fora da tela, mantenho uma rotina ativa: adoro <span class='highlight'>jogar futebol</span>, pratico <span class='highlight'>jiu-jitsu</span> e treino na <span class='highlight'>academia</span> regularmente. Disciplina e dedicação valem tanto no código quanto no tatame." data-en="Outside the screen, I keep an active routine: I love <span class='highlight'>playing soccer</span>, I practice <span class='highlight'>jiu-jitsu</span>, and I train at the <span class='highlight'>gym</span> regularly. Discipline and dedication matter just as much in code as they do on the mat.">Fora da tela, mantenho uma rotina ativa: adoro <span class="highlight">jogar futebol</span>, pratico <span class="highlight">jiu-jitsu</span> e treino na <span class="highlight">academia</span> regularmente. Disciplina e dedicação valem tanto no código quanto no tatame.</p>
+        <div class="about-tags">
+          <span class="tag">Python</span>
+          <span class="tag">C++</span>
+          <span class="tag">C#</span>
+          <span class="tag">Full Stack</span>
+          <span class="tag">Design Gráfico</span>
+          <span class="tag">Edição de Vídeo</span>
+          <span class="tag">Drone</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <h2 class="section-title reveal" data-pt="<span>Skills</span>" data-en="<span>Skills</span>"><span>Skills</span></h2>
+    <p class="section-subtitle reveal reveal-delay-1" data-pt="Tecnologias e ferramentas que domino" data-en="Technologies and tools I work with">Tecnologias e ferramentas que domino</p>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <div class="skill-icon">💻</div>
+        <h3 data-pt="Desenvolvimento Full Stack" data-en="Full Stack Development">Desenvolvimento Full Stack</h3>
+        <p data-pt="Frontend e backend integrados" data-en="Integrated frontend and backend">Frontend e backend integrados</p>
+        <div class="skill-bar"><div class="skill-bar-fill" data-width="85%"></div></div>
+      </div>
+      <div class="skill-card reveal reveal-delay-1">
+        <div class="skill-icon">🎨</div>
+        <h3 data-pt="Design Gráfico" data-en="Graphic Design">Design Gráfico</h3>
+        <p data-pt="+8 anos de experiência" data-en="8+ years of experience">+8 anos de experiência</p>
+        <div class="skill-bar"><div class="skill-bar-fill" data-width="90%"></div></div>
+      </div>
+      <div class="skill-card reveal reveal-delay-2">
+        <div class="skill-icon">🎬</div>
+        <h3 data-pt="Edição de Vídeo" data-en="Video Editing">Edição de Vídeo</h3>
+        <p data-pt="Experiência profissional na área" data-en="Professional experience">Experiência profissional na área</p>
+        <div class="skill-bar"><div class="skill-bar-fill" data-width="75%"></div></div>
+      </div>
+      <div class="skill-card reveal reveal-delay-3">
+        <div class="skill-icon">⚙️</div>
+        <h3 data-pt="Python & C++" data-en="Python & C++">Python & C++</h3>
+        <p data-pt="Resolução de problemas e automação" data-en="Problem solving and automation">Resolução de problemas e automação</p>
+        <div class="skill-bar"><div class="skill-bar-fill" data-width="80%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="container">
+    <h2 class="section-title reveal" data-pt="<span>Experiência</span>" data-en="<span>Experience</span>"><span>Experiência</span></h2>
+    <p class="section-subtitle reveal reveal-delay-1" data-pt="Minha trajetória até aqui" data-en="My journey so far">Minha trajetória até aqui</p>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-date" data-pt="🚁 2026 — Presente" data-en="🚁 2026 — Present">🚁 2026 — Presente</div>
+        <h3 data-pt="Osprey Aerial Solutions • Fundador" data-en="Osprey Aerial Solutions • Founder">Osprey Aerial Solutions • Fundador</h3>
+        <p data-pt="Fundei minha própria empresa de voo de drone, unindo minha visão técnica e criativa para oferecer soluções aéreas inovadoras. Responsável pela operação, captação de imagens aéreas, edição e gestão geral do negócio." data-en="Founded my own drone flight company, combining my technical and creative vision to offer innovative aerial solutions. Responsible for operations, aerial footage, editing, and overall business management.">Fundei minha própria empresa de voo de drone, unindo minha visão técnica e criativa para oferecer soluções aéreas inovadoras. Responsável pela operação, captação de imagens aéreas, edição e gestão geral do negócio.</p>
+      </div>
+      <div class="timeline-item reveal reveal-delay-1">
+        <div class="timeline-date" data-pt="2026 — Presente" data-en="2026 — Present">2026 — Presente</div>
+        <h3 data-pt="Engenharia de Software • UniCEUB" data-en="Software Engineering • UniCEUB">Engenharia de Software • UniCEUB</h3>
+        <p data-pt="Cursando o segundo semestre. Foco em desenvolvimento full stack, estruturas de dados e engenharia de software." data-en="Currently in my second semester. Focus on full stack development, data structures, and software engineering.">Cursando o segundo semestre. Foco em desenvolvimento full stack, estruturas de dados e engenharia de software.</p>
+      </div>
+      <div class="timeline-item reveal reveal-delay-2">
+        <div class="timeline-date" data-pt="2025 — 2026" data-en="2025 — 2026">2025 — 2026</div>
+        <h3 data-pt="LATAM Airlines" data-en="LATAM Airlines">LATAM Airlines</h3>
+        <p data-pt="Assistente Administrativo. Experiência em logística, trabalho em equipe e adaptação a ambientes corporativos dinâmicos." data-en="Administrative Assistant. Experience in logistics, teamwork, and adapting to dynamic corporate environments.">Assistente Administrativo. Experiência em logística, trabalho em equipe e adaptação a ambientes corporativos dinâmicos.</p>
+      </div>
+      <div class="timeline-item reveal reveal-delay-3">
+        <div class="timeline-date" data-pt="2020 — Presente" data-en="2020 — Present">2020 — Presente</div>
+        <h3 data-pt="Designer Gráfico Freelancer" data-en="Freelance Graphic Designer">Designer Gráfico Freelancer</h3>
+        <p data-pt="Atuação profissional em design gráfico e edição de vídeo, com olhar apurado para composição visual e detalhes." data-en="Professional work in graphic design and video editing, with a sharp eye for visual composition and details.">Atuação profissional em design gráfico e edição de vídeo, com olhar apurado para composição visual e detalhes.</p>
+      </div>
+      <div class="timeline-item reveal" style="margin-bottom:0">
+        <div class="timeline-date" data-pt="2018" data-en="2018">2018</div>
+        <h3 data-pt="Primeiro contato com programação" data-en="First contact with programming">Primeiro contato com programação</h3>
+        <p data-pt="Aos 12 anos, fiz um curso que me apresentou aos fundamentos de programação e design, despertando minha paixão por criar jogos e software." data-en="At age 12, I took a course that introduced me to programming and design fundamentals, sparking my passion for creating games and software.">Aos 12 anos, fiz um curso que me apresentou aos fundamentos de programação e design, despertando minha paixão por criar jogos e software.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certificates">
+  <div class="container">
+    <h2 class="section-title reveal" data-pt="<span>Certificados</span>" data-en="<span>Certificates</span>"><span>Certificados</span></h2>
+    <p class="section-subtitle reveal reveal-delay-1" data-pt="Clique em um certificado para visualizar" data-en="Click a certificate to view it">Clique em um certificado para visualizar</p>
+    <div class="cert-grid">
+      <!-- MK Games Academy -->
+      <div class="cert-card reveal" onclick="openCertModal('cert-mkgames')">
+        <div class="cert-header">
+          <div class="cert-icon">🎮</div>
+          <div class="cert-hours">192h</div>
+        </div>
+        <h3>MK Games Academy</h3>
+        <p class="cert-course" data-pt="Criação de Jogos 2D" data-en="2D Game Development">Criação de Jogos 2D</p>
+        <p class="cert-desc" data-pt="Formação completa em desenvolvimento de jogos 2D, abordando game design, programação de mecânicas, criação de assets visuais, animação de sprites, implementação de física e inteligência artificial para NPCs, level design e publicação de jogos para múltiplas plataformas." data-en="Complete training in 2D game development, covering game design, mechanics programming, visual asset creation, sprite animation, physics implementation, NPC AI, level design, and multi-platform game publishing.">Formação completa em desenvolvimento de jogos 2D, abordando game design, programação de mecânicas, criação de assets visuais, animação de sprites, implementação de física e inteligência artificial para NPCs, level design e publicação de jogos para múltiplas plataformas.</p>
+        <div class="cert-tags">
+          <span class="cert-tag" data-pt="Game Design" data-en="Game Design">Game Design</span>
+          <span class="cert-tag" data-pt="Programação" data-en="Programming">Programação</span>
+          <span class="cert-tag" data-pt="Animação" data-en="Animation">Animação</span>
+        </div>
+        <div class="cert-zoom-hint" data-pt="🔍 Clique para ver o certificado" data-en="🔍 Click to view certificate">🔍 Clique para ver o certificado</div>
+      </div>
+      <!-- CS50 Harvard -->
+      <div class="cert-card reveal reveal-delay-1" onclick="openCertModal('cert-cs50')">
+        <div class="cert-header">
+          <div class="cert-icon">🎓</div>
+          <div class="cert-hours">70h</div>
+        </div>
+        <h3>CS50 — Harvard University</h3>
+        <p class="cert-course" data-pt="Introdução à Ciência da Computação" data-en="Introduction to Computer Science">Introdução à Ciência da Computação</p>
+        <p class="cert-desc" data-pt="Prestigiado curso introdutório de Harvard, cobrindo fundamentos de ciência da computação em C, Python, SQL, HTML, CSS e JavaScript. Inclui algoritmos, estruturas de dados, gerenciamento de memória, desenvolvimento web e mobile, com projetos práticos que simulam desafios reais de engenharia de software." data-en="Harvard's prestigious introductory course covering computer science fundamentals in C, Python, SQL, HTML, CSS, and JavaScript. Includes algorithms, data structures, memory management, web and mobile development, with hands-on projects simulating real software engineering challenges.">Prestigiado curso introdutório de Harvard, cobrindo fundamentos de ciência da computação em C, Python, SQL, HTML, CSS e JavaScript. Inclui algoritmos, estruturas de dados, gerenciamento de memória, desenvolvimento web e mobile, com projetos práticos que simulam desafios reais de engenharia de software.</p>
+        <div class="cert-tags">
+          <span class="cert-tag" data-pt="Algoritmos" data-en="Algorithms">Algoritmos</span>
+          <span class="cert-tag" data-pt="C" data-en="C">C</span>
+          <span class="cert-tag" data-pt="Python" data-en="Python">Python</span>
+          <span class="cert-tag" data-pt="Web" data-en="Web">Web</span>
+        </div>
+        <div class="cert-zoom-hint" data-pt="🔍 Clique para ver o certificado" data-en="🔍 Click to view certificate">🔍 Clique para ver o certificado</div>
+      </div>
+      <!-- Santander -->
+      <div class="cert-card reveal reveal-delay-2" onclick="openCertModal('cert-santander')">
+        <div class="cert-header">
+          <div class="cert-icon">🐍</div>
+          <div class="cert-hours">8h</div>
+        </div>
+        <h3>Santander Bootcamp</h3>
+        <p class="cert-course" data-pt="Fundamentos de Python" data-en="Python Fundamentals">Fundamentos de Python</p>
+        <p class="cert-desc" data-pt="Curso introdutório focado nos fundamentos da linguagem Python, abordando sintaxe, variáveis, estruturas condicionais, laços de repetição, funções, manipulação de strings e introdução à lógica de programação aplicada a problemas reais." data-en="Introductory course focused on Python fundamentals, covering syntax, variables, conditional structures, loops, functions, string manipulation, and introduction to programming logic applied to real-world problems.">Curso introdutório focado nos fundamentos da linguagem Python, abordando sintaxe, variáveis, estruturas condicionais, laços de repetição, funções, manipulação de strings e introdução à lógica de programação aplicada a problemas reais.</p>
+        <div class="cert-tags">
+          <span class="cert-tag" data-pt="Python" data-en="Python">Python</span>
+          <span class="cert-tag" data-pt="Lógica" data-en="Logic">Lógica</span>
+        </div>
+        <div class="cert-zoom-hint" data-pt="🔍 Clique para ver o certificado" data-en="🔍 Click to view certificate">🔍 Clique para ver o certificado</div>
+      </div>
+      <!-- Bradesco -->
+      <div class="cert-card reveal reveal-delay-3" onclick="openCertModal('cert-bradesco')">
+        <div class="cert-header">
+          <div class="cert-icon">🏦</div>
+          <div class="cert-hours">18h</div>
+        </div>
+        <h3>Bradesco — Escola Virtual</h3>
+        <p class="cert-course" data-pt="Python para Iniciantes" data-en="Python for Beginners">Python para Iniciantes</p>
+        <p class="cert-desc" data-pt="Curso estruturado de Python com carga horária ampliada, explorando tipos de dados, coleções (listas, tuplas, dicionários), funções, modularização, tratamento de exceções, leitura e escrita de arquivos, e introdução a bibliotecas para automação de tarefas." data-en="Structured Python course with extended hours, exploring data types, collections (lists, tuples, dictionaries), functions, modularization, exception handling, file I/O, and introduction to automation libraries.">Curso estruturado de Python com carga horária ampliada, explorando tipos de dados, coleções (listas, tuplas, dicionários), funções, modularização, tratamento de exceções, leitura e escrita de arquivos, e introdução a bibliotecas para automação de tarefas.</p>
+        <div class="cert-tags">
+          <span class="cert-tag" data-pt="Python" data-en="Python">Python</span>
+          <span class="cert-tag" data-pt="Automação" data-en="Automation">Automação</span>
+          <span class="cert-tag" data-pt="Estruturas de Dados" data-en="Data Structures">Estruturas de Dados</span>
+        </div>
+        <div class="cert-zoom-hint" data-pt="🔍 Clique para ver o certificado" data-en="🔍 Click to view certificate">🔍 Clique para ver o certificado</div>
+      </div>
+      <!-- DevArt -->
+      <div class="cert-card reveal" onclick="openCertModal('cert-devart')">
+        <div class="cert-header">
+          <div class="cert-icon">🎨</div>
+          <div class="cert-hours">5h</div>
+        </div>
+        <h3>DevArt</h3>
+        <p class="cert-course" data-pt="Design, Front End & IA Aplicada" data-en="Design, Front End & Applied AI">Design, Front End & IA Aplicada</p>
+        <p class="cert-desc" data-pt="Curso multidisciplinar unindo princípios de design gráfico, desenvolvimento frontend (HTML, CSS, JavaScript) e aplicação de inteligência artificial no fluxo de criação. Aborda teoria das cores, tipografia, UI/UX, componentes responsivos e uso de ferramentas de IA para acelerar prototipação e geração de conteúdo visual." data-en="Multidisciplinary course combining graphic design principles, frontend development (HTML, CSS, JavaScript), and AI application in the creative workflow. Covers color theory, typography, UI/UX, responsive components, and AI tools for rapid prototyping and visual content generation.">Curso multidisciplinar unindo princípios de design gráfico, desenvolvimento frontend (HTML, CSS, JavaScript) e aplicação de inteligência artificial no fluxo de criação. Aborda teoria das cores, tipografia, UI/UX, componentes responsivos e uso de ferramentas de IA para acelerar prototipação e geração de conteúdo visual.</p>
+        <div class="cert-tags">
+          <span class="cert-tag" data-pt="UI/UX" data-en="UI/UX">UI/UX</span>
+          <span class="cert-tag" data-pt="Frontend" data-en="Frontend">Frontend</span>
+          <span class="cert-tag" data-pt="IA" data-en="AI">IA</span>
+        </div>
+        <div class="cert-zoom-hint" data-pt="🔍 Clique para ver o certificado" data-en="🔍 Click to view certificate">🔍 Clique para ver o certificado</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERT MODAL -->
+<div class="cert-modal-overlay" id="certModalOverlay" onclick="closeCertModal(event)">
+  <div class="cert-modal" onclick="event.stopPropagation()">
+    <button class="cert-modal-close" onclick="closeCertModal()" data-pt="✕ Fechar" data-en="✕ Close">✕ Fechar</button>
+    <div class="cert-modal-title" id="certModalTitle"></div>
+    <div class="cert-modal-img-wrap">
+      <img id="certModalImg" src="" alt="Certificado" class="hidden">
+      <div class="cert-modal-placeholder" id="certModalPlaceholder">
+        <div class="placeholder-icon">📄</div>
+        <p id="certModalPlaceholderText"></p>
+      </div>
+    </div>
+    <a id="certModalDownload" href="" download class="cert-modal-download-btn" data-pt="⬇ Baixar certificado" data-en="⬇ Download certificate" style="display:none">⬇ Baixar certificado</a>
+  </div>
+</div>
+
+<section id="hobbies">
+  <div class="container">
+    <h2 class="section-title reveal" data-pt="<span>Hobbies</span>" data-en="<span>Hobbies</span>"><span>Hobbies</span></h2>
+    <p class="section-subtitle reveal reveal-delay-1" data-pt="O que me move fora da tela" data-en="What drives me off-screen">O que me move fora da tela</p>
+    <div class="hobbies-grid">
+      <div class="hobby-card reveal">
+        <div class="hobby-icon">⚽</div>
+        <h3 data-pt="Futebol" data-en="Soccer">Futebol</h3>
+        <p data-pt="Sempre que possível, em campo" data-en="On the pitch whenever possible">Sempre que possível, em campo</p>
+      </div>
+      <div class="hobby-card reveal reveal-delay-1">
+        <div class="hobby-icon">🥋</div>
+        <h3>Jiu-Jitsu</h3>
+        <p data-pt="Disciplina e superação" data-en="Discipline and overcoming">Disciplina e superação</p>
+      </div>
+      <div class="hobby-card reveal reveal-delay-2">
+        <div class="hobby-icon">🏋️</div>
+        <h3 data-pt="Academia" data-en="Gym">Academia</h3>
+        <p data-pt="Treino regular e foco" data-en="Regular training and focus">Treino regular e foco</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="container">
+    <h2 class="section-title reveal" data-pt="Vamos <span>conversar?</span>" data-en="Let's <span>talk?</span>">Vamos <span>conversar?</span></h2>
+    <p class="section-subtitle reveal reveal-delay-1" data-pt="Estou aberto a oportunidades e projetos" data-en="I'm open to opportunities and projects">Estou aberto a oportunidades e projetos</p>
+    <div class="contact-links reveal reveal-delay-2">
+      
+      <a href="https://www.linkedin.com/in/isaac-ramos-4616b9368/" target="_blank" class="contact-card"><div class="icon">💼</div><span>LinkedIn</span></a>
+      <a href="https://github.com/Izackzin" target="_blank" class="contact-card"><div class="icon">🐙</div><span>GitHub</span></a>
+      <a href="https://www.instagram.com/isaac.rmz1/" target="_blank" class="contact-card"><div class="icon">📸</div><span>Instagram</span></a>
+      <a href="mailto:isaacramosrk@gmail.com" class="contact-card"><div class="icon">✉️</div><span>Email</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p data-pt="Feito por <span>Isaac Ramos</span> • 2026" data-en="Made by <span>Isaac Ramos</span> • 2026">Feito por <span>Isaac Ramos</span> • 2026</p>
+</footer>
+
+<script>
+// ===== NAVBAR SCROLL =====
+const navbar=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{navbar.classList.toggle('scrolled',window.scrollY>50)});
+
+// ===== MOBILE NAV =====
+function toggleMobileNav(){document.getElementById('navLinks').classList.toggle('mobile-open')}
+
+// ===== REVEAL ON SCROLL =====
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+      if(entry.target.querySelector('.skill-bar-fill')){
+        entry.target.querySelectorAll('.skill-bar-fill').forEach(bar=>bar.style.width=bar.dataset.width);
+      }
+    }
+  });
+},{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ===== PARTICLES =====
+function createParticle(){
+  const p=document.createElement('div');
+  p.className='particle';
+  const s=Math.random()*4+2;
+  p.style.width=s+'px';p.style.height=s+'px';
+  p.style.left=Math.random()*100+'%';p.style.bottom='0';
+  p.style.animationDuration=(Math.random()*10+8)+'s';
+  document.querySelector('.hero').appendChild(p);
+  setTimeout(()=>p.remove(),18000);
+}
+setInterval(createParticle,800);
+
+// ===== SMOOTH SCROLL CLOSE MOBILE NAV =====
+document.querySelectorAll('.nav-links a').forEach(link=>{
+  link.addEventListener('click',()=>{document.getElementById('navLinks').classList.remove('mobile-open')});
+});
+
+// ===== LANGUAGE SWITCHER =====
+let currentLang='pt';
+function switchLang(lang){
+  if(lang===currentLang)return;
+  currentLang=lang;
+  document.getElementById('btnPT').classList.toggle('active',lang==='pt');
+  document.getElementById('btnEN').classList.toggle('active',lang==='en');
+  document.querySelectorAll('[data-pt]').forEach(el=>{
+    if(!el.hasAttribute('data-pt-original')){
+      el.setAttribute('data-pt-original',el.dataset.pt);
+    }
+    const text=lang==='pt'?el.getAttribute('data-pt-original'):el.dataset.en;
+    if(text)el.innerHTML=text;
+  });
+  document.documentElement.lang=lang==='pt'?'pt-BR':'en';
+}
+
+// ===== CERTIFICATE MODAL =====
+const certImages={
+  'cert-mkgames':{src:'cert-mkgames.jpg',title:'MK Games Academy — Criação de Jogos 2D (192h)'},
+  'cert-cs50':{src:'cert-cs50.jpg',title:'CS50 — Harvard University (70h)'},
+  'cert-santander':{src:'cert-santander.jpg',title:'Santander Bootcamp — Fundamentos de Python (8h)'},
+  'cert-bradesco':{src:'cert-bradesco.jpg',title:'Bradesco — Python para Iniciantes (18h)'},
+  'cert-devart':{src:'cert-devart.jpg',title:'DevArt — Design, Front End & IA Aplicada (5h)'}
+};
+
+function openCertModal(certId){
+  const cert=certImages[certId];
+  if(!cert)return;
+  const overlay=document.getElementById('certModalOverlay');
+  const img=document.getElementById('certModalImg');
+  const placeholder=document.getElementById('certModalPlaceholder');
+  const placeholderText=document.getElementById('certModalPlaceholderText');
+  const titleEl=document.getElementById('certModalTitle');
+  const downloadBtn=document.getElementById('certModalDownload');
+  const lang=document.documentElement.lang==='en'?'en':'pt';
+  titleEl.textContent=cert.title;
+  img.classList.add('hidden');
+  placeholder.classList.remove('hidden');
+  placeholderText.textContent=lang==='pt'?'Carregando...':'Loading...';
+  img.onload=function(){
+    img.classList.remove('hidden');
+    placeholder.classList.add('hidden');
+    downloadBtn.href=cert.src;
+    downloadBtn.style.display='inline-flex';
+  };
+  img.onerror=function(){
+    img.classList.add('hidden');
+    placeholder.classList.remove('hidden');
+    placeholderText.innerHTML=lang==='pt'
+      ?'📄 Imagem não encontrada.<br>Coloque o arquivo <strong>'+cert.src+'</strong> na mesma pasta.'
+      :'📄 Image not found.<br>Place <strong>'+cert.src+'</strong> in the same folder.';
+    downloadBtn.style.display='none';
+  };
+  img.src=cert.src;
+  overlay.classList.add('active');
+  document.body.style.overflow='hidden';
+}
+
+function closeCertModal(event){
+  if(event&&event.target!==document.getElementById('certModalOverlay'))return;
+  document.getElementById('certModalOverlay').classList.remove('active');
+  document.body.style.overflow='';
+  setTimeout(()=>{document.getElementById('certModalImg').src='';},300);
+}
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    const o=document.getElementById('certModalOverlay');
+    if(o.classList.contains('active')){o.classList.remove('active');document.body.style.overflow='';}
+  }
+});
+</script>
+
+</body>
+</html>
